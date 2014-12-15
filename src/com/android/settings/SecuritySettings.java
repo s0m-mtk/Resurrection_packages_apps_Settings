@@ -91,6 +91,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
     // Lock Settings
     private static final String KEY_UNLOCK_SET_OR_CHANGE = "unlock_set_or_change";
     private static final String KEY_VISIBLE_PATTERN = "visiblepattern";
+    private static final String KEY_VISIBLE_GESTURE = "visiblegesture";
     private static final String KEY_VISIBLE_ERROR_PATTERN = "visible_error_pattern";
     private static final String KEY_VISIBLE_DOTS = "visibledots";
     private static final String KEY_SECURITY_CATEGORY = "security_category";
@@ -126,7 +127,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
 
     // These switch preferences need special handling since they're not all stored in Settings.
     private static final String SWITCH_PREFERENCE_KEYS[] = { KEY_LOCK_AFTER_TIMEOUT,
-            KEY_VISIBLE_PATTERN, KEY_POWER_INSTANTLY_LOCKS, KEY_DIRECTLY_SHOW, KEY_VISIBLE_ERROR_PATTERN, KEY_VISIBLE_DOTS,
+            KEY_VISIBLE_PATTERN, KEY_VISIBLE_GESTURE, KEY_POWER_INSTANTLY_LOCKS, KEY_DIRECTLY_SHOW, KEY_VISIBLE_ERROR_PATTERN, KEY_VISIBLE_DOTS,
             KEY_POWER_INSTANTLY_LOCKS, KEY_SHOW_PASSWORD, KEY_TOGGLE_INSTALL_APPLICATIONS };
 
     // Only allow one trust agent on the platform.
@@ -146,6 +147,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
 
     private SwitchPreference mVisiblePattern;
     private SwitchPreference mDirectlyShow;
+    private SwitchPreference mVisibleGesture;
     private SwitchPreference mVisibleErrorPattern;
     private SwitchPreference mVisibleDots;
 
@@ -234,6 +236,9 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
                     resid = R.xml.security_settings_password;
+                    break;
+                case DevicePolicyManager.PASSWORD_QUALITY_GESTURE_WEAK:
+                    resid = R.xml.security_settings_gesture;
                     break;
             }
         }
@@ -364,6 +369,12 @@ public class SecuritySettings extends SettingsPreferenceFragment
         // directly show
         mDirectlyShow = (SwitchPreference) root.findPreference(KEY_DIRECTLY_SHOW);
 
+        // visible gesture
+        mVisibleGesture = (SwitchPreference) root.findPreference(KEY_VISIBLE_GESTURE);
+
+        // visible error pattern
+        mVisibleErrorPattern = (SwitchPreference) root.findPreference(KEY_VISIBLE_ERROR_PATTERN);
+
         // lock instantly on power key press
         mPowerButtonInstantlyLocks = (SwitchPreference) root.findPreference(
                 KEY_POWER_INSTANTLY_LOCKS);
@@ -433,6 +444,17 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 } else if (numPhones > 1) {
                     iccLockGroup.removePreference(iccLock);
                 }
+
+        // don't display visible pattern if biometric and backup is not pattern
+        if (resid == R.xml.security_settings_biometric_weak &&
+                mLockPatternUtils.getKeyguardStoredPasswordQuality() !=
+                DevicePolicyManager.PASSWORD_QUALITY_SOMETHING) {
+            if (securityCategory != null && mVisiblePattern != null &&
+                   mVisibleErrorPattern != null && mVisibleGesture != null && mVisibleDots != null) {
+                securityCategory.removePreference(mVisiblePattern);
+                securityCategory.removePreference(mVisibleErrorPattern);
+                securityCategory.removePreference(mVisibleGesture);
+                securityCategory.removePreference(mVisibleDots);
             }
 
             if (Settings.System.getInt(getContentResolver(),
@@ -856,6 +878,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
             lockPatternUtils.setPassToSecurityView((Boolean) value, MY_USER_ID);
         } else if (KEY_VISIBLE_ERROR_PATTERN.equals(key)) {
             lockPatternUtils.setShowErrorPath((Boolean) value, MY_USER_ID);
+        } else if (KEY_VISIBLE_GESTURE.equals(key)) {
+            lockPatternUtils.setVisibleGestureEnabled((Boolean) value);
         } else if (KEY_VISIBLE_DOTS.equals(key)) {
             lockPatternUtils.setVisibleDotsEnabled((Boolean) value, MY_USER_ID);
         } else if (KEY_POWER_INSTANTLY_LOCKS.equals(key)) {
