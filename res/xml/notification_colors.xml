@@ -179,6 +179,47 @@
     <PreferenceCategory
         android:key="notification_cat_volume"
         android:title="@string/notification_cat_volume">
+
+     <com.android.settings.cyanogenmod.SystemSettingSwitchPreference
+            android:key="volume_dialog_color_switch"
+            android:title="@string/volume_dialog_color_switch_title"
+            android:defaultValue="false"/>
+
+        <SwitchPreference
+            android:key="volume_dialog_background_gradient_use_center_color"
+            android:title="@string/background_gradient_use_center_color_title"
+            android:summary="@string/background_gradient_use_center_color_summary"
+	    android:dependency="volume_dialog_color_switch" />
+
+        <ListPreference
+            android:key="volume_dialog_background_gradient_orientation"
+            android:title="@string/background_gradient_orientation_title"
+            android:dialogTitle="@string/background_gradient_orientation_dlg_title"
+            android:entries="@array/background_gradient_orientation_entries"
+            android:entryValues="@array/background_gradient_orientation_values" 
+	    android:dependency="volume_dialog_color_switch" />
+
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="volume_dialog_background_color_start"
+            android:title="@string/color_title"
+            android:defaultValue="0xff000000"
+	    android:dependency="volume_dialog_color_switch"/>
+
+
+         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="volume_dialog_background_color_center"
+            android:title="@string/background_center_color_title"
+            android:defaultValue="0xff000000"
+	    android:dependency="volume_dialog_background_gradient_use_center_color"/>
+
+
+         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="volume_dialog_background_color_end"
+            android:title="@string/background_end_color_title"
+            android:defaultValue="0xff000000" 
+	    android:dependency="volume_dialog_color_switch" />
+
     
     <ListPreference
         android:key="volume_dialog_stroke"
@@ -240,6 +281,61 @@
          android:persistent="false" />
    
       </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="stroke_settings"
+        android:title="@string/stroke_category_title">
+
+        <ListPreference
+            android:key="status_bar_expanded_header_stroke"
+            android:title="@string/stroke_title"
+            android:dialogTitle="@string/stroke_title"
+            android:entries="@array/stroke_entries"
+            android:entryValues="@array/stroke_values" />
+
+        <com.android.settings.rr.SeekBarPreference
+            android:key="status_bar_expanded_header_corner_radius"
+            android:title="@string/corner_radius_title"
+            android:max="50"
+            settings:min="1"
+            settings:unitsLeft=""
+            settings:unitsRight="px"
+            android:persistent="false" />
+
+        <com.android.settings.rr.SeekBarPreference
+            android:key="status_bar_expanded_header_stroke_dash_gap"
+            android:title="@string/dash_gap_title"
+            android:max="50"
+            settings:min="1"
+            settings:unitsLeft=""
+            settings:unitsRight="px"
+            android:persistent="false" />
+
+        <com.android.settings.rr.SeekBarPreference
+            android:key="status_bar_expanded_header_stroke_dash_width"
+            android:title="@string/dash_width_title"
+            android:max="50"
+            settings:min="1"
+            settings:unitsLeft=""
+            settings:unitsRight="px"
+            android:persistent="false" />
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="status_bar_expanded_header_stroke_color"
+            android:title="@string/stroke_color_title"
+            android:defaultValue="0xff1976D2" />
+
+        <com.android.settings.rr.SeekBarPreference
+            android:key="status_bar_expanded_header_stroke_thickness"
+            android:title="@string/stroke_thickness_title"
+            android:max="25"
+            settings:min="1"
+            settings:unitsLeft=""
+            settings:unitsRight="px"
+            android:persistent="false" />
+
+</PreferenceCategory>
     
 
 </PreferenceScreen>

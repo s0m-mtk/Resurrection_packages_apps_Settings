@@ -29,6 +29,7 @@ import android.os.UserHandle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.SwitchPreference;
 import com.android.settings.rr.SeekBarPreference;
@@ -64,12 +65,28 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
  private static final String QS_BACKGROUND_COLOR = "qs_bg_color";
  private static final String QS_COLOR_SWITCH = "qs_color_switch";
  private static final String QS_ICON = "qs_brightness_icon_color";
+ private static final String PREF_GRADIENT_ORIENTATION = "qs_background_gradient_orientation";
+ private static final String PREF_USE_CENTER_COLOR = "qs_background_gradient_use_center_color";
+ private static final String PREF_START_COLOR = "qs_background_color_start";
+ private static final String PREF_CENTER_COLOR = "qs_background_color_center";
+ private static final String PREF_END_COLOR ="qs_background_color_end";
+ private static final String BG_COLORS = "qs_bg_colors";
+ private static final String RR_COLORS = "rr_qs_bg_colors";
+ private static final String GENERAL_COLORS = "rr_qs_bg_colors_general";
+ private static final String PREF_GRADIENT_ORIENTATION_HEADER = "header_background_gradient_orientation";
+ private static final String PREF_USE_CENTER_COLOR_HEADER = "header_background_gradient_use_center_color";
+ private static final String PREF_HEADER_START_COLOR = "header_background_color_start";
+ private static final String PREF_CENTER_COLOR_HEADER = "header_background_color_center";
+ private static final String PREF_HEADER_END_COLOR = "header_background_color_end";
 
     static final int DEFAULT = 0xffffffff;
     static final int DEFAULT_BG = 0xff263238;
     static final int DEFAULT_HEADER_BG = 0xff384248;
     static final int DEFAULT_SECONDARY_TEXT = 0xb3ffffff;
     static final int DEFAULT_TEXT = 0xffffffff;
+    private static final int BLACK = 0xff000000;
+
+    private static final int BACKGROUND_ORIENTATION_T_B = 270;
     
     private static final int MENU_RESET = Menu.FIRST;
 	
@@ -80,15 +97,33 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
     private ColorPickerPreference mQsIconColor;	
     private ColorPickerPreference mQsBgColor;	
     private ColorPickerPreference mSliderIconColor;
-    private SwitchPreference mQsColorSwitch;
+    private ListPreference mQsColorSwitch;
+    private SwitchPreference mUseCenterColor;
+    private ColorPickerPreference mStartColor;
+    private ColorPickerPreference mCenterColor;
+    private ColorPickerPreference mEndColor;
+    private ListPreference mGradientOrientationHeader;
+    private SwitchPreference mHeaderUseCenterColor;
+    private ColorPickerPreference mHeaderStartColor;
+    private ColorPickerPreference mHeaderCenterColor;
+    private ColorPickerPreference mHeaderEndColor;
+    private ListPreference mGradientOrientation;
+   
+    private ContentResolver mResolver;
    
 
  @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+	refreshSettings();
+	}
+   
+   public void refreshSettings() {
         addPreferencesFromResource(R.xml.rr_qs_colors);
         PreferenceScreen prefSet = getPreferenceScreen();
+
         final ContentResolver resolver = getActivity().getContentResolver();
+	mResolver = getActivity().getContentResolver();
 
    	int intColor;
         String hexColor;
@@ -141,14 +176,116 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
         mSliderIconColor.setSummary(hexColor);
         mSliderIconColor.setNewPreviewColor(intColor);
 
+	int qscolor = Settings.System.getIntForUser(mResolver,
+                            Settings.System.QS_COLOR_SWITCH, 0,
+                            UserHandle.USER_CURRENT);
+        mQsColorSwitch = (ListPreference) prefSet.findPreference(QS_COLOR_SWITCH);
+        mQsColorSwitch.setValue(String.valueOf(qscolor));
+        mQsColorSwitch.setSummary(mQsColorSwitch.getEntry());
+        mQsColorSwitch.setOnPreferenceChangeListener(this);
 
-        mQsColorSwitch = (SwitchPreference) prefSet.findPreference(QS_COLOR_SWITCH);
-        mQsColorSwitch.setChecked((Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.QS_COLOR_SWITCH, 0) == 1));
-	mQsColorSwitch.setOnPreferenceChangeListener(this);
 
-	
-	setHasOptionsMenu(true);
+	PreferenceCategory catBgColors =
+                (PreferenceCategory) findPreference(BG_COLORS);
+
+	PreferenceCategory catrrColors =
+                (PreferenceCategory) findPreference(RR_COLORS);
+
+	PreferenceCategory catgenColors =
+                (PreferenceCategory) findPreference(GENERAL_COLORS);
+
+        mGradientOrientationHeader =
+                (ListPreference) findPreference(PREF_GRADIENT_ORIENTATION_HEADER);
+        final int orientation = Settings.System.getInt(mResolver,
+                Settings.System.HEADER_BACKGROUND_GRADIENT_ORIENTATION,
+                BACKGROUND_ORIENTATION_T_B);
+         mGradientOrientationHeader.setValue(String.valueOf(orientation));
+         mGradientOrientationHeader.setSummary(mGradientOrientationHeader.getEntry());
+         mGradientOrientationHeader.setOnPreferenceChangeListener(this);
+ 
+         mStartColor =
+                 (ColorPickerPreference) findPreference(PREF_START_COLOR);
+         intColor = Settings.System.getInt(mResolver,
+                 Settings.System.QS_BACKGROUND_COLOR_START, BLACK); 
+         mStartColor.setNewPreviewColor(intColor);
+         hexColor = String.format("#%08x", (0xffffffff & intColor));
+         mStartColor.setSummary(hexColor);
+         mStartColor.setOnPreferenceChangeListener(this);
+ 
+         final boolean useCenterColor = Settings.System.getInt(mResolver,
+                 Settings.System.QS_BACKGROUND_GRADIENT_USE_CENTER_COLOR, 0) == 1;;
+ 
+         mUseCenterColor = (SwitchPreference) findPreference(PREF_USE_CENTER_COLOR);
+         mUseCenterColor.setChecked(useCenterColor);
+         mUseCenterColor.setOnPreferenceChangeListener(this);
+ 
+         mStartColor.setTitle(getResources().getString(R.string.background_start_color_title));
+
+             mCenterColor =
+                     (ColorPickerPreference) findPreference(PREF_CENTER_COLOR);
+             intColor = Settings.System.getInt(mResolver,
+                     Settings.System.QS_BACKGROUND_COLOR_CENTER, BLACK); 
+             mCenterColor.setNewPreviewColor(intColor);
+             hexColor = String.format("#%08x", (0xffffffff & intColor));
+             mCenterColor.setSummary(hexColor);
+             mCenterColor.setOnPreferenceChangeListener(this);
+
+ 
+         mEndColor =
+                 (ColorPickerPreference) findPreference(PREF_END_COLOR);
+         intColor = Settings.System.getInt(mResolver,
+                 Settings.System.QS_BACKGROUND_COLOR_END, BLACK); 
+         mEndColor.setNewPreviewColor(intColor);
+         hexColor = String.format("#%08x", (0xffffffff & intColor));
+         mEndColor.setSummary(hexColor);
+         mEndColor.setOnPreferenceChangeListener(this);
+
+	   mGradientOrientation =
+                   (ListPreference) findPreference(PREF_GRADIENT_ORIENTATION);
+           final int orientation1 = Settings.System.getInt(mResolver,
+                   Settings.System.QS_BACKGROUND_GRADIENT_ORIENTATION,
+                   BACKGROUND_ORIENTATION_T_B);
+           mGradientOrientation.setValue(String.valueOf(orientation1));
+           mGradientOrientation.setSummary(mGradientOrientation.getEntry());
+           mGradientOrientation.setOnPreferenceChangeListener(this);
+   
+           mHeaderStartColor =
+                   (ColorPickerPreference) findPreference(PREF_HEADER_START_COLOR);
+           intColor = Settings.System.getInt(mResolver,
+                   Settings.System.HEADER_BACKGROUND_COLOR_START, BLACK); 
+           mHeaderStartColor.setNewPreviewColor(intColor);
+           hexColor = String.format("#%08x", (0xffffffff & intColor));
+           mHeaderStartColor.setSummary(hexColor);
+           mHeaderStartColor.setOnPreferenceChangeListener(this);
+   
+           final boolean useheaderCenterColor = Settings.System.getInt(mResolver,
+                   Settings.System.HEADER_BACKGROUND_GRADIENT_USE_CENTER_COLOR, 0) == 1;;
+   
+           mHeaderUseCenterColor = (SwitchPreference) findPreference(PREF_USE_CENTER_COLOR_HEADER);
+           mHeaderUseCenterColor.setChecked(useheaderCenterColor);
+           mHeaderUseCenterColor.setOnPreferenceChangeListener(this);
+   
+           mStartColor.setTitle(getResources().getString(R.string.background_start_color_title));
+   
+               mHeaderCenterColor =
+                       (ColorPickerPreference) findPreference(PREF_CENTER_COLOR_HEADER);
+               intColor = Settings.System.getInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_COLOR_CENTER, BLACK); 
+               mHeaderCenterColor.setNewPreviewColor(intColor);
+               hexColor = String.format("#%08x", (0xffffffff & intColor));
+               mHeaderCenterColor.setSummary(hexColor);
+               mHeaderCenterColor.setOnPreferenceChangeListener(this);
+   
+           mHeaderEndColor =
+                   (ColorPickerPreference) findPreference(PREF_HEADER_END_COLOR);
+           intColor = Settings.System.getInt(mResolver,
+                   Settings.System.HEADER_BACKGROUND_COLOR_END, BLACK); 
+           mHeaderEndColor.setNewPreviewColor(intColor);
+           hexColor = String.format("#%08x", (0xffffffff & intColor));
+           mHeaderEndColor.setSummary(hexColor);
+           mHeaderEndColor.setOnPreferenceChangeListener(this);
+	   setcolordisabler(qscolor);
+	   setHasOptionsMenu(true);
 
 }
 
@@ -209,9 +346,13 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
                     Settings.System.QS_BACKGROUND_COLOR, intHex);	
             return true;
          }  else if (preference == mQsColorSwitch) {
-             boolean value = (Boolean) newValue;
-             Settings.System.putInt(resolver, Settings.System.QS_COLOR_SWITCH, value ? 1 : 0);
-             return true;
+                int qscolor = Integer.parseInt((String) newValue);
+                int index = mQsColorSwitch.findIndexOfValue((String) newValue);
+                Settings.System.putIntForUser(mResolver, Settings.System.
+                        QS_COLOR_SWITCH, qscolor, UserHandle.USER_CURRENT);
+                mQsColorSwitch.setSummary(mQsColorSwitch.getEntries()[index]);
+		setcolordisabler(qscolor);
+                return true;
          }  else if (preference == mSliderIconColor) {
             String hex = ColorPickerPreference.convertToARGB(
                     Integer.valueOf(String.valueOf(newValue)));
@@ -220,6 +361,82 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.QS_BRIGHTNESS_ICON_COLOR, intHex);	
             return true;
+         } else if (preference == mUseCenterColor) {
+                boolean value = (Boolean) newValue;
+                Settings.System.putInt(mResolver,
+                        Settings.System.QS_BACKGROUND_GRADIENT_USE_CENTER_COLOR,
+                        value ? 1 : 0);
+                return true;
+            } else if (preference == mStartColor) {
+                String hex = ColorPickerPreference.convertToARGB(
+                        Integer.valueOf(String.valueOf(newValue)));
+                int intHex = ColorPickerPreference.convertToColorInt(hex);
+                Settings.System.putInt(mResolver,
+                        Settings.System.QS_BACKGROUND_COLOR_START, intHex);
+                preference.setSummary(hex);
+                return true;
+            } else if (preference == mCenterColor) {
+                String hex = ColorPickerPreference.convertToARGB(
+                        Integer.valueOf(String.valueOf(newValue)));
+                int intHex = ColorPickerPreference.convertToColorInt(hex);
+                Settings.System.putInt(mResolver,
+                        Settings.System.QS_BACKGROUND_COLOR_CENTER, intHex);
+                preference.setSummary(hex);
+                return true;
+            } else if (preference == mEndColor) {
+                String hex = ColorPickerPreference.convertToARGB(
+                        Integer.valueOf(String.valueOf(newValue)));
+                int intHex = ColorPickerPreference.convertToColorInt(hex);
+                Settings.System.putInt(mResolver,
+                        Settings.System.QS_BACKGROUND_COLOR_END, intHex);
+                preference.setSummary(hex);
+                return true;
+            } else if (preference == mGradientOrientation) {
+                int intValue = Integer.valueOf((String) newValue);
+                int index = mGradientOrientation.findIndexOfValue((String) newValue);
+                Settings.System.putInt(mResolver,
+                        Settings.System.QS_BACKGROUND_GRADIENT_ORIENTATION,
+                        intValue);
+                mGradientOrientation.setSummary(mGradientOrientation.getEntries()[index]);
+                return true;
+         }  else if (preference == mHeaderUseCenterColor) {
+               boolean value = (Boolean) newValue;
+               Settings.System.putInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_GRADIENT_USE_CENTER_COLOR,
+                       value ? 1 : 0);
+               return true;
+           } else if (preference == mHeaderStartColor) {
+               String hex = ColorPickerPreference.convertToARGB(
+                       Integer.valueOf(String.valueOf(newValue)));
+               int intHex = ColorPickerPreference.convertToColorInt(hex);
+               Settings.System.putInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_COLOR_START, intHex);
+               preference.setSummary(hex);
+               return true;
+           } else if (preference == mHeaderCenterColor) {
+               String hex = ColorPickerPreference.convertToARGB(
+                       Integer.valueOf(String.valueOf(newValue)));
+               int intHex  = ColorPickerPreference.convertToColorInt(hex);
+               Settings.System.putInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_COLOR_CENTER, intHex);
+               preference.setSummary(hex);
+               return true;
+           } else if (preference == mHeaderEndColor) {
+               String hex= ColorPickerPreference.convertToARGB(
+                       Integer.valueOf(String.valueOf(newValue)));
+               int intHex = ColorPickerPreference.convertToColorInt(hex);
+               Settings.System.putInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_COLOR_END, intHex);
+               preference.setSummary(hex);
+               return true;
+           }  else if (preference == mGradientOrientationHeader) {
+               int intValue = Integer.valueOf((String) newValue);
+               int index = mGradientOrientationHeader.findIndexOfValue((String) newValue);
+               Settings.System.putInt(mResolver,
+                       Settings.System.HEADER_BACKGROUND_GRADIENT_ORIENTATION,
+                       intValue);
+               mGradientOrientationHeader.setSummary(mGradientOrientationHeader.getEntries()[index]);
+               return true;
          }
 	return false;
 	}
@@ -279,6 +496,31 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
         mSliderIconColor.setSummary(R.string.default_string);
 
     }
+    
+    public void setcolordisabler(int qscolor) {
+	PreferenceCategory catBgColors =
+                (PreferenceCategory) findPreference(BG_COLORS);
+
+	PreferenceCategory catrrColors =
+                (PreferenceCategory) findPreference(RR_COLORS);
+
+
+	PreferenceCategory catgenColors =
+                (PreferenceCategory) findPreference(GENERAL_COLORS);
+	 if (qscolor == 0) {
+		 catrrColors.setEnabled(false);
+		 catBgColors.setEnabled(false);
+		 catgenColors.setEnabled(false);
+         } else if (qscolor == 1) {
+		 catrrColors.setEnabled(true);
+	 	 catBgColors.setEnabled(false);
+	         catgenColors.setEnabled(true);
+	 } else if (qscolor == 2) {
+		 catrrColors.setEnabled(false);
+		 catBgColors.setEnabled(true);
+		 catgenColors.setEnabled(true);
+	   }
+	}
     
     
     	    public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
