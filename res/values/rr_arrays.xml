@@ -1980,12 +1980,16 @@
         <item>@string/default_qs_colors</item>
         <item>@string/rr_qs_colors</item>
 	<item>@string/gradient_qs_colors</item>
+        <item>@string/rr_qs_colors_no_icon</item>
+	<item>@string/gradient_qs_colors_no_icon</item>
     </string-array>
 
     <string-array name="qs_bg_color_values">
         <item>0</item>
         <item>1</item>
 	<item>2</item>
+        <item>3</item>
+	<item>4</item>
     </string-array>
     
 </resources>

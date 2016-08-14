@@ -19,6 +19,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
 
+        <Preference
+            android:key="qs_color_switch_summary"
+            android:title="@string/qs_color_switch_summary_title"
+            android:summary="@string/qs_color_switch_summary_main"
+            android:selectable="false"/>
+
 
     <ListPreference
        android:key="qs_color_switch"
@@ -119,18 +125,18 @@
  
          <net.margaritov.preference.colorpicker.ColorPickerPreference
              android:key="header_background_color_start"
-             android:title="@string/color_title"
+             android:title="@string/header_center_color_title"
              android:defaultValue="0xff000000" />
  
           <net.margaritov.preference.colorpicker.ColorPickerPreference
              android:key="header_background_color_center"
-             android:title="@string/background_center_color_title"
+             android:title="@string/header_background_center_color_title"
              android:defaultValue="0xff000000" 
 	     android:dependency="header_background_gradient_use_center_color"/>
  
           <net.margaritov.preference.colorpicker.ColorPickerPreference
              android:key="header_background_color_end"
-             android:title="@string/background_end_color_title"
+             android:title="@string/header_background_end_color_title"
              android:defaultValue="0xff000000" />
 
 

@@ -511,14 +511,27 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
 		 catrrColors.setEnabled(false);
 		 catBgColors.setEnabled(false);
 		 catgenColors.setEnabled(false);
+		 mQsIconColor.setEnabled(false);
          } else if (qscolor == 1) {
 		 catrrColors.setEnabled(true);
 	 	 catBgColors.setEnabled(false);
 	         catgenColors.setEnabled(true);
+		 mQsIconColor.setEnabled(true);
 	 } else if (qscolor == 2) {
 		 catrrColors.setEnabled(false);
 		 catBgColors.setEnabled(true);
 		 catgenColors.setEnabled(true);
+		 mQsIconColor.setEnabled(true);
+	   } else if (qscolor == 3) {
+		 catrrColors.setEnabled(false);
+		 catBgColors.setEnabled(true);
+		 catgenColors.setEnabled(true);
+		 mQsIconColor.setEnabled(false);
+	   } else if (qscolor == 4) {
+		 catrrColors.setEnabled(false);
+		 catBgColors.setEnabled(true);
+		 catgenColors.setEnabled(true);
+		 mQsIconColor.setEnabled(false);
 	   }
 	}
     

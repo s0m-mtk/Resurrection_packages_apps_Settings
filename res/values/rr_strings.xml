@@ -1875,6 +1875,9 @@
 	<!-- QS Tiles Rows -->
 	<string name="qs_color_switch">Custom Qs Colors</string>
 	<string name="qs_color_switch_summary">Overrides Theme Colors.</string>
+	<string name="qs_color_switch_summary_title">Quick Settings Panel Colors</string>
+	<string name="qs_color_switch_summary_main">Colorize various Elements on Qs Panel. NOTE: Settings icon colors might disable qs icon animation. Use at your own risk</string>
+
 	<string name="qs_header_text_color">Qs Detail Text</string>
 	<string name="qs_header_color">Header Background</string>
 	<string name="qs_text_color">Text Color</string>
@@ -1888,10 +1891,16 @@
 	<string name="rr_qs_colors">Normal</string>
 	<string name="gradient_qs_colors">Gradient</string>
 	<string name="rr_qs_colors">Normal</string>
+	<string name="rr_qs_colors_no_icon">Normal Without Colorized Icon</string>
+	<string name="gradient_qs_colors_no_icon">Gradient Without Colorized Icons</string>
 	<string name="rr_bg_colors_title">Regular</string>
 	<string name="rr_bg_colors_general_title">General Colors</string>
 	<string name="volume_dialog_color_switch_title">Volume Dialog Colors</string>
 
+	<string name="header_center_color_title">Header Start Color</string>
+	<string name="header_background_center_color_title">Header Center Color</string>
+	<string name="header_background_end_color_title">Header End Color</string>
+        <string name="header_background_gradient_orientation_title">Header Orientation</string>
 
          <!-- Gradient Backgrounds Settings -->
         <string name="gradient_bg_colors_title">Gradient Background Color</string>
