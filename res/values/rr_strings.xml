@@ -1875,6 +1875,12 @@
 	<!-- QS Tiles Rows -->
 	<string name="qs_color_switch">Custom Qs Colors</string>
 	<string name="qs_color_switch_summary">Overrides Theme Colors.</string>
+	<string name="qs_color_switch">Custom Qs Colors</string>
+	<string name="qs_custom_master_switch_summary">Customize Border of Quick Settings Panel.Use at your own risk .Might not be compatible with some themes.</string>
+	<string name="qs_custom_master_switch_title">Quick Settings Corner and Stroke</string>
+	<string name="qs_header_master_switch_summary">Customize Border of Header.Use at your own risk .Might not be compatible with some themes.</string>
+	<string name="qs_header_master_switch_title">Header Corner and Stroke</string>
+	<string name="qs_color_switch_summary">Overrides Theme Colors.</string>
 	<string name="qs_color_switch_summary_title">Quick Settings Panel Colors</string>
 	<string name="qs_color_switch_summary_main">Colorize various Elements on Qs Panel. NOTE: Settings icon colors might disable qs icon animation. Use at your own risk</string>
 

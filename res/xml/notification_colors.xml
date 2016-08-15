@@ -65,64 +65,6 @@
 	
 </PreferenceCategory>
 
-
-    <PreferenceCategory
-        android:key="notification_cat_qs"
-        android:title="@string/qs_trans_title">
-	
-    <ListPreference
-        android:key="qs_stroke"
-        android:title="@string/qs_stroke_title"
-        android:dialogTitle="@string/qs_stroke_title"
-        android:entries="@array/qs_stroke_entries"
-        android:entryValues="@array/qs_stroke_values"
-        android:defaultValue="0" />
-
-    <net.margaritov.preference.colorpicker.ColorPickerPreference
-        android:key="qs_stroke_color"
-        android:title="@string/qs_stroke_color_title"
-        android:defaultValue="0xff80cbc4"/>
-
-    <com.android.settings.rr.SeekBarPreferenceCham
-        android:key="qs_stroke_thickness"
-        android:title="@string/qs_stroke_thickness_title"
-        android:max="25"
-        settings:min="1"
-        settings:unitsLeft=""
-        settings:unitsRight="px"
-        android:persistent="false" />
-
-    <com.android.settings.rr.SeekBarPreferenceCham
-        android:key="qs_corner_radius"
-        android:title="@string/qs_corner_radius_title"
-        android:max="50"
-        settings:min="0"
-        settings:unitsLeft=""
-        settings:unitsRight="px"
-        android:persistent="false" />
-    
-    
-      <com.android.settings.rr.SeekBarPreferenceCham
-         android:key="qs_dash_width"
-         android:title="@string/qs_dash_width_title"
-         android:max="50"
-         settings:min="0"
-         settings:unitsLeft=""
-         settings:unitsRight="px"
-         android:persistent="false" />
- 
-     <com.android.settings.rr.SeekBarPreferenceCham
-         android:key="qs_dash_gap"
-         android:title="@string/qs_dash_gap_title"
-         android:max="50"
-         settings:min="1"
-         settings:unitsLeft=""
-	 settings:unitsRight="px"
-	 android:persistent="false" />
-     
-     
-   </PreferenceCategory>
-   
       <PreferenceCategory
          android:key="qs_panel_logo_category"
          android:title="@string/qs_panel_logo_category">
@@ -281,61 +223,6 @@
          android:persistent="false" />
    
       </PreferenceCategory>
-
-
-    <PreferenceCategory
-        android:key="stroke_settings"
-        android:title="@string/stroke_category_title">
-
-        <ListPreference
-            android:key="status_bar_expanded_header_stroke"
-            android:title="@string/stroke_title"
-            android:dialogTitle="@string/stroke_title"
-            android:entries="@array/stroke_entries"
-            android:entryValues="@array/stroke_values" />
-
-        <com.android.settings.rr.SeekBarPreference
-            android:key="status_bar_expanded_header_corner_radius"
-            android:title="@string/corner_radius_title"
-            android:max="50"
-            settings:min="1"
-            settings:unitsLeft=""
-            settings:unitsRight="px"
-            android:persistent="false" />
-
-        <com.android.settings.rr.SeekBarPreference
-            android:key="status_bar_expanded_header_stroke_dash_gap"
-            android:title="@string/dash_gap_title"
-            android:max="50"
-            settings:min="1"
-            settings:unitsLeft=""
-            settings:unitsRight="px"
-            android:persistent="false" />
-
-        <com.android.settings.rr.SeekBarPreference
-            android:key="status_bar_expanded_header_stroke_dash_width"
-            android:title="@string/dash_width_title"
-            android:max="50"
-            settings:min="1"
-            settings:unitsLeft=""
-            settings:unitsRight="px"
-            android:persistent="false" />
-
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="status_bar_expanded_header_stroke_color"
-            android:title="@string/stroke_color_title"
-            android:defaultValue="0xff1976D2" />
-
-        <com.android.settings.rr.SeekBarPreference
-            android:key="status_bar_expanded_header_stroke_thickness"
-            android:title="@string/stroke_thickness_title"
-            android:max="25"
-            settings:min="1"
-            settings:unitsLeft=""
-            settings:unitsRight="px"
-            android:persistent="false" />
-
-</PreferenceCategory>
     
 
 </PreferenceScreen>

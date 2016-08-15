@@ -78,25 +78,13 @@ public class NotificationColorSettings extends SettingsPreferenceFragment implem
     private static final String PREF_VOLUME_DIALOG_STROKE_COLOR = "volume_dialog_stroke_color";
     private static final String PREF_VOLUME_DIALOG_STROKE_THICKNESS = "volume_dialog_stroke_thickness";
     private static final String PREF_VOLUME_DIALOG_CORNER_RADIUS = "volume_dialog_corner_radius";
-    private static final String PREF_QS_STROKE = "qs_stroke";
-    private static final String PREF_QS_STROKE_COLOR = "qs_stroke_color";
-    private static final String PREF_QS_STROKE_THICKNESS = "qs_stroke_thickness";
-    private static final String PREF_QS_CORNER_RADIUS = "qs_corner_radius";
+
     private static final String PREF_VOLUME_DIALOG_STROKE_DASH_WIDTH = "volume_dialog_dash_width";
     private static final String PREF_VOLUME_DIALOG_STROKE_DASH_GAP = "volume_dialog_dash_gap";
-    private static final String PREF_QS_STROKE_DASH_WIDTH = "qs_dash_width";
-    private static final String PREF_QS_STROKE_DASH_GAP = "qs_dash_gap";
     private static final String PREF_QS_PANEL_LOGO = "qs_panel_logo";
     private static final String PREF_QS_PANEL_LOGO_COLOR = "qs_panel_logo_color";
     private static final String PREF_QS_PANEL_LOGO_ALPHA = "qs_panel_logo_alpha";
     private static final String PREF_NOTIFICATION_ALPHA = "notification_alpha";
-    private static final String STROKE_CATEGORY = "stroke_settings";
-    private static final String STATUS_BAR_EXPANDED_HEADER_STROKE = "status_bar_expanded_header_stroke";
-    private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_COLOR = "status_bar_expanded_header_stroke_color";
-    private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_THICKNESS = "status_bar_expanded_header_stroke_thickness";
-    private static final String STATUS_BAR_EXPANDED_HEADER_CORNER_RADIUS = "status_bar_expanded_header_corner_radius";
-    private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_GAP = "status_bar_expanded_header_stroke_dash_gap";
-private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH = "status_bar_expanded_header_stroke_dash_width";
 
     private static final String PREF_GRADIENT_ORIENTATION = "volume_dialog_background_gradient_orientation";
     private static final String PREF_USE_CENTER_COLOR = "volume_dialog_background_gradient_use_center_color";
@@ -120,8 +108,6 @@ private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH = "stat
     private static final int TRANSLUCENT_WHITE = 0x4dffffff;
     
     static final int DEFAULT_VOLUME_DIALOG_STROKE_COLOR = 0xFF80CBC4;
-    static final int DEFAULT_QS_STROKE_COLOR = 0xFF80CBC4;
-    static final int DEFAULT_HEADER_STROKE_COLOR = 0xFF80CBC4;
 
     private static final int MENU_RESET = Menu.FIRST;
     private static final int DLG_RESET = 0;
@@ -146,25 +132,13 @@ private static final String STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH = "stat
     private ColorPickerPreference mVolumeDialogStrokeColor;
     private SeekBarPreferenceCham mVolumeDialogStrokeThickness;
     private SeekBarPreferenceCham mVolumeDialogCornerRadius;
-    private ListPreference mQSStroke;
-    private ColorPickerPreference mQSStrokeColor;
-    private SeekBarPreferenceCham mQSStrokeThickness;
-    private SeekBarPreferenceCham mQSCornerRadius;
     private SeekBarPreferenceCham mVolumeDialogDashWidth;
     private SeekBarPreferenceCham mVolumeDialogDashGap;
-    private SeekBarPreferenceCham mQSDashWidth;
-    private SeekBarPreferenceCham mQSDashGap;
     private SwitchPreference mUseCenterColor;
     private ColorPickerPreference mStartColor;
     private ColorPickerPreference mCenterColor;
     private ColorPickerPreference mEndColor;
     private ListPreference mGradientOrientation;
-    private ListPreference mSBEHStroke;
-    private ColorPickerPreference mSBEHStrokeColor;
-    private SeekBarPreference mSBEHStrokeThickness;
-    private SeekBarPreference mSBEHCornerRadius;
-    private SeekBarPreference mSBEHStrokeDashGap;
-private SeekBarPreference mSBEHStrokeDashWidth;
   
     private ContentResolver mResolver;
 
@@ -190,10 +164,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
 
         int intColor;
         String hexColor;
-
- 	   final int strokeMode = Settings.System.getInt(mResolver,
-                Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE, ACCENT);
-	   boolean notDisabled = strokeMode == ACCENT || strokeMode == CUSTOM;
 
 	    mMediaBgMode = (ListPreference) findPreference(PREF_MEDIA_BG_MODE);
 	    int mediaBgMode = Settings.System.getInt(mResolver,
@@ -303,42 +273,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                     Settings.System.VOLUME_DIALOG_CORNER_RADIUS, 2);
             mVolumeDialogCornerRadius.setValue(volumeDialogCornerRadius / 1);
             mVolumeDialogCornerRadius.setOnPreferenceChangeListener(this);
-
-            // QS stroke
-            mQSStroke =
-                    (ListPreference) findPreference(PREF_QS_STROKE);
-            int qSStroke = Settings.System.getIntForUser(mResolver,
-                            Settings.System.QS_STROKE, 0,
-                            UserHandle.USER_CURRENT);
-            mQSStroke.setValue(String.valueOf(qSStroke));
-            mQSStroke.setSummary(mQSStroke.getEntry());
-            mQSStroke.setOnPreferenceChangeListener(this);
-
-            // QS stroke color
-            mQSStrokeColor =
-                    (ColorPickerPreference) findPreference(PREF_QS_STROKE_COLOR);
-            intColor = Settings.System.getInt(mResolver,
-                    Settings.System.QS_STROKE_COLOR, DEFAULT_QS_STROKE_COLOR);
-            hexColor = String.format("#%08x", (0xFF80CBC4 & intColor));
-            mQSStrokeColor.setSummary(hexColor);
-            mQSStrokeColor.setNewPreviewColor(intColor);
-            mQSStrokeColor.setOnPreferenceChangeListener(this);
-
-            // QS stroke thickness
-            mQSStrokeThickness =
-                    (SeekBarPreferenceCham) findPreference(PREF_QS_STROKE_THICKNESS);
-            int qSStrokeThickness = Settings.System.getInt(mResolver,
-                    Settings.System.QS_STROKE_THICKNESS, 4);
-            mQSStrokeThickness.setValue(qSStrokeThickness / 1);
-            mQSStrokeThickness.setOnPreferenceChangeListener(this);
-
-            // QS corner radius
-            mQSCornerRadius =
-                    (SeekBarPreferenceCham) findPreference(PREF_QS_CORNER_RADIUS);
-            int qSCornerRadius = Settings.System.getInt(mResolver,
-                    Settings.System.QS_CORNER_RADIUS, 0);
-            mQSCornerRadius.setValue(qSCornerRadius / 1);
-            mQSCornerRadius.setOnPreferenceChangeListener(this);
             
             
              // Volume dialog dash width
@@ -361,29 +295,7 @@ private SeekBarPreference mSBEHStrokeDashWidth;
              mVolumeDialogDashGap.setValue(volumeDialogDashGap / 1);
              mVolumeDialogDashGap.setOnPreferenceChangeListener(this);
              
-             
-             // QS dash width
-             mQSDashWidth =
-                     (SeekBarPreferenceCham) findPreference(PREF_QS_STROKE_DASH_WIDTH);
-             int qSDialogDashWidth = Settings.System.getInt(mResolver,
-                     Settings.System.QS_STROKE_DASH_WIDTH, 0);
-             if (qSDialogDashWidth != 0) {
-                 mQSDashWidth.setValue(qSDialogDashWidth / 1);
-             } else {
-                 mQSDashWidth.setValue(0);
-             }
-             mQSDashWidth.setOnPreferenceChangeListener(this);
- 
-             // QS dash gap
-             mQSDashGap =
-                     (SeekBarPreferenceCham) findPreference(PREF_QS_STROKE_DASH_GAP);
-             int qSDialogDashGap = Settings.System.getInt(mResolver,
-                     Settings.System.QS_STROKE_DASH_GAP, 10);
-             mQSDashGap.setValue(qSDialogDashGap / 1);
-             mQSDashGap.setOnPreferenceChangeListener(this);
-
-            VolumeDialogSettingsDisabler(volumeDialogStroke);
-            QSSettingsDisabler(qSStroke);
+             VolumeDialogSettingsDisabler(volumeDialogStroke);
             
              // QS panel RR logo
              mQSPanelLogo =
@@ -412,54 +324,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                      Settings.System.QS_PANEL_LOGO_ALPHA, 51);
              mQSPanelLogoAlpha.setValue(qSPanelLogoAlpha / 1);
              mQSPanelLogoAlpha.setOnPreferenceChangeListener(this);
-
-	mSBEHStroke = (ListPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_STROKE);
-        mSBEHStroke.setValue(String.valueOf(strokeMode));
-        mSBEHStroke.setSummary(mSBEHStroke.getEntry());
-        mSBEHStroke.setOnPreferenceChangeListener(this);
-
-        mSBEHCornerRadius =
-                (SeekBarPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_CORNER_RADIUS);
-        int cornerRadius = Settings.System.getInt(mResolver,
-                Settings.System.STATUS_BAR_EXPANDED_HEADER_CORNER_RADIUS, 2);
-        mSBEHCornerRadius.setValue(cornerRadius / 1);
-        mSBEHCornerRadius.setOnPreferenceChangeListener(this);
-
-            mSBEHStrokeDashGap =
-                    (SeekBarPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_GAP);
-            int strokeDashGap = Settings.System.getInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_GAP, 10);
-            mSBEHStrokeDashGap.setValue(strokeDashGap / 1);
-            mSBEHStrokeDashGap.setOnPreferenceChangeListener(this);
-
-            mSBEHStrokeDashWidth =
-                    (SeekBarPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH);
-            int strokeDashWidth = Settings.System.getInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH, 0);
-            mSBEHStrokeDashWidth.setValue(strokeDashWidth / 1);
-            mSBEHStrokeDashWidth.setOnPreferenceChangeListener(this);
-
-            mSBEHStrokeThickness =
-                    (SeekBarPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_STROKE_THICKNESS);
-            int strokeThickness = Settings.System.getInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_THICKNESS, 4);
-            mSBEHStrokeThickness.setValue(strokeThickness / 1);
-            mSBEHStrokeThickness.setOnPreferenceChangeListener(this);
-
-            mSBEHStrokeColor =
-                        (ColorPickerPreference) findPreference(STATUS_BAR_EXPANDED_HEADER_STROKE_COLOR);
-                intColor = Settings.System.getInt(mResolver,
-                        Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_COLOR, DEFAULT_HEADER_STROKE_COLOR); 
-                mSBEHStrokeColor.setNewPreviewColor(intColor);
-                hexColor = String.format("#%08x", (0xffffffff & intColor));
-                mSBEHStrokeColor.setSummary(hexColor);
-                mSBEHStrokeColor.setOnPreferenceChangeListener(this);
-
-            int headerstroke = Settings.System.getIntForUser(mResolver,
-                            Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE, 0,
-                            UserHandle.USER_CURRENT);
-	   
-	    HeaderSettingsDisabler(headerstroke);
 
  	    mGradientOrientation = (ListPreference) findPreference(PREF_GRADIENT_ORIENTATION);
             final int orientation = Settings.System.getInt(mResolver,
@@ -637,32 +501,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                 Settings.System.putInt(mResolver,
                         Settings.System.VOLUME_DIALOG_CORNER_RADIUS, val * 1);
                 return true;
-        }  else if (preference == mQSStroke) {
-                int qSStroke = Integer.parseInt((String) newValue);
-                int index = mQSStroke.findIndexOfValue((String) newValue);
-                Settings.System.putIntForUser(mResolver, Settings.System.
-                        QS_STROKE, qSStroke, UserHandle.USER_CURRENT);
-                mQSStroke.setSummary(mQSStroke.getEntries()[index]);
-                QSSettingsDisabler(qSStroke);
-                return true;
-        }  else if (preference == mQSStrokeColor) {
-                hex = ColorPickerPreference.convertToARGB(
-                        Integer.valueOf(String.valueOf(newValue)));
-                preference.setSummary(hex);
-                intHex = ColorPickerPreference.convertToColorInt(hex);
-                Settings.System.putInt(mResolver,
-                        Settings.System.QS_STROKE_COLOR, intHex);
-                return true;
-        } else if (preference == mQSStrokeThickness) {
-                int val = (Integer) newValue;
-                Settings.System.putInt(mResolver,
-                        Settings.System.QS_STROKE_THICKNESS, val * 1);
-                return true;
-        }  else if (preference == mQSCornerRadius) {
-                int val = (Integer) newValue;
-                Settings.System.putInt(mResolver,
-                        Settings.System.QS_CORNER_RADIUS, val * 1);
-                return true;
         } else if (preference == mVolumeDialogDashWidth) {
                  int val = (Integer) newValue;
                  Settings.System.putInt(mResolver,
@@ -673,16 +511,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                  Settings.System.putInt(mResolver,
                          Settings.System.VOLUME_DIALOG_STROKE_DASH_GAP, val * 1);
                  return true;
-        } else if (preference == mQSDashWidth) {
-                 int val = (Integer) newValue;
-                 Settings.System.putInt(mResolver,
-                         Settings.System.QS_STROKE_DASH_WIDTH, val * 1);
-                 return true;
-        } else if (preference == mQSDashGap) {
-                 int val = (Integer) newValue;
-                 Settings.System.putInt(mResolver,
-                         Settings.System.QS_STROKE_DASH_GAP, val * 1);
-                 return true;    
         } else if (preference == mQSPanelLogo) {
                  int qSPanelLogo = Integer.parseInt((String) newValue);
                  int index = mQSPanelLogo.findIndexOfValue((String) newValue);
@@ -743,43 +571,7 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                         intValue);
                 mGradientOrientation.setSummary(mGradientOrientation.getEntries()[index]);
                 return true;
-         } else if (preference == mSBEHStroke) {
-	    int Hstroke = Integer.parseInt((String) newValue);
-            Settings.System.putInt(mResolver, Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE,
-                    Integer.valueOf((String) newValue));
-            mSBEHStroke.setValue(String.valueOf(newValue));
-            mSBEHStroke.setSummary(mSBEHStroke.getEntry());
-            HeaderSettingsDisabler(Hstroke);
-            return true;
-        } else if (preference == mSBEHStrokeColor) {
-            hex = ColorPickerPreference.convertToARGB(
-                    Integer.valueOf(String.valueOf(newValue)));
-            intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_COLOR, intHex);
-            preference.setSummary(hex);
-            return true;
-        } else if (preference == mSBEHStrokeThickness) {
-            int val = (Integer) newValue;
-            Settings.System.putInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_THICKNESS, val * 1);
-            return true;
-        } else if (preference == mSBEHCornerRadius) {
-            int val = (Integer) newValue;
-            Settings.System.putInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_CORNER_RADIUS, val * 1);
-            return true;
-        } else if (preference == mSBEHStrokeDashGap) {
-            int val = (Integer) newValue;
-            Settings.System.putInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_GAP, val * 1);
-            return true;
-        } else if (preference == mSBEHStrokeDashWidth) {
-            int val = (Integer) newValue;
-            Settings.System.putInt(mResolver,
-                    Settings.System.STATUS_BAR_EXPANDED_HEADER_STROKE_DASH_WIDTH, val * 1);
-            return true;
-}
+            }
         return false;
     }
     
@@ -801,28 +593,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                 mVolumeDialogDashGap.setEnabled(true);
             }
         }
-
-        private void QSSettingsDisabler(int qSStroke) {
-            if (qSStroke == 0) {
-                mQSStrokeColor.setEnabled(false);
-                mQSStrokeThickness.setEnabled(false);
-		mQSCornerRadius.setEnabled(false);
-                mQSDashWidth.setEnabled(false);
-                mQSDashGap.setEnabled(false);
-            } else if (qSStroke == 1) {
-                mQSStrokeColor.setEnabled(false);
-                mQSStrokeThickness.setEnabled(true);
-                mQSCornerRadius.setEnabled(true);
-                mQSDashWidth.setEnabled(true);
-                mQSDashGap.setEnabled(true);
-            } else {
-                mQSStrokeColor.setEnabled(true);
-                mQSStrokeThickness.setEnabled(true);
-		mQSCornerRadius.setEnabled(true);
-                mQSDashWidth.setEnabled(true);
-                mQSDashGap.setEnabled(true);
-            }
-        }
         
        private void QSPanelLogoSettingsDisabler(int qSPanelLogo) {
              if (qSPanelLogo == 0) {
@@ -836,28 +606,6 @@ private SeekBarPreference mSBEHStrokeDashWidth;
                  mQSPanelLogoAlpha.setEnabled(true);
              }
          }
-
-     public void HeaderSettingsDisabler(int stroke) {
-	     if (stroke == 0) {
-                mSBEHStrokeColor.setEnabled(false);
-                mSBEHStrokeThickness.setEnabled(false);
-		mSBEHCornerRadius.setEnabled(false);
-                mSBEHStrokeDashWidth.setEnabled(false);
-                mSBEHStrokeDashGap.setEnabled(false);
-            } else if (stroke == 1) {
-                mSBEHStrokeColor.setEnabled(false);
-                mSBEHStrokeThickness.setEnabled(true);
-		mSBEHCornerRadius.setEnabled(true);
-                mSBEHStrokeDashWidth.setEnabled(true);
-                mSBEHStrokeDashGap.setEnabled(true);
-            } else {
-                mSBEHStrokeColor.setEnabled(true);
-                mSBEHStrokeThickness.setEnabled(true);
-		mSBEHCornerRadius.setEnabled(true);
-                mSBEHStrokeDashWidth.setEnabled(true);
-                mSBEHStrokeDashGap.setEnabled(true);
-            }
-        }
 
        private void showDialogInner(int id) {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance(id);
