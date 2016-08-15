@@ -729,26 +729,41 @@ public class QsColors extends SettingsPreferenceFragment  implements Preference.
 		 catBgColors.setEnabled(false);
 		 catgenColors.setEnabled(false);
 		 mQsIconColor.setEnabled(false);
+		 mHeaderColor.setEnabled(false);
+		 mQsBgColor.setEnabled(false);
+		 mQsTextColor.setEnabled(false);
          } else if (qscolor == 1) {
 		 catrrColors.setEnabled(true);
 	 	 catBgColors.setEnabled(false);
 	         catgenColors.setEnabled(true);
 		 mQsIconColor.setEnabled(true);
+		 mHeaderColor.setEnabled(true);
+		 mQsBgColor.setEnabled(true);
+		 mQsTextColor.setEnabled(true);
 	 } else if (qscolor == 2) {
 		 catrrColors.setEnabled(false);
 		 catBgColors.setEnabled(true);
 		 catgenColors.setEnabled(true);
 		 mQsIconColor.setEnabled(true);
+		 mHeaderColor.setEnabled(false);
+		 mQsBgColor.setEnabled(false);
+		 mQsTextColor.setEnabled(true);
 	   } else if (qscolor == 3) {
-		 catrrColors.setEnabled(false);
-		 catBgColors.setEnabled(true);
+		 catrrColors.setEnabled(true);
+		 catBgColors.setEnabled(false);
 		 catgenColors.setEnabled(true);
 		 mQsIconColor.setEnabled(false);
+		 mHeaderColor.setEnabled(true);
+		 mQsBgColor.setEnabled(true);
+		 mQsTextColor.setEnabled(true);
 	   } else if (qscolor == 4) {
 		 catrrColors.setEnabled(false);
 		 catBgColors.setEnabled(true);
 		 catgenColors.setEnabled(true);
 		 mQsIconColor.setEnabled(false);
+		 mHeaderColor.setEnabled(false);
+		 mQsBgColor.setEnabled(false);
+		 mQsTextColor.setEnabled(true);
 	   }
 	}
 	
