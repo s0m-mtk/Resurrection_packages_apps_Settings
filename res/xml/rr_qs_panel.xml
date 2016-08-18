@@ -85,6 +85,13 @@
     <PreferenceCategory
         android:key="advanced_tiles_category"
         android:title="@string/qstile_advanced_category">
+
+    <com.android.settings.cyanogenmod.SecureSettingSwitchPreference
+         android:key="qs_data_advanced"
+         android:title="@string/qs_data_tile_advanced_title"
+         android:summaryOn="@string/qs_data_tile_advanced_summary_on"
+	 android:summaryOff="@string/qs_data_tile_advanced_summary_off"
+         android:defaultValue="false"/>
     
     
     <com.android.settings.cyanogenmod.CMSecureSettingSwitchPreference

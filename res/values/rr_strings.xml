@@ -2372,6 +2372,10 @@
      <string name="adb_always_notify">Debugging always notify</string>
      <string name="adb_always_notify_summary">Always display a notification when debugging is enabled, even if not connected</string>
 
+     <string name="qs_data_tile_advanced_title">Advanced Data Tile</string>
+     <string name="qs_data_tile_advanced_summary_on">Tapping data tile will enable /disable mobile data </string>
+     <string name="qs_data_tile_advanced_summary_off">Tapping data tile will open detail view </string>
+
     <!-- Instant reboot -->
     <string name="advanced_reboot_oneclick">One click reboot</string>
     <string name="advanced_reboot_oneclick_summary">Instantly trigger reboot action</string>
